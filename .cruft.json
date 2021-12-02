@@ -8,5 +8,8 @@
       "_template": "https://github.com/iterative/cookiecutter-dvc-plugin/"
     }
   },
-  "directory": null
+  "directory": null,
+  "skip": [
+    ".git"
+  ]
 }
