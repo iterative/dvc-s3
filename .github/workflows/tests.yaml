@@ -1,0 +1,87 @@
+name: Tests
+
+on:
+  pull_request: {}
+  push: {}
+  schedule:
+    - cron: '5 1 * * *'  # every day at 01:05
+
+env:
+  DVC_TEST: "true"
+  HOMEBREW_NO_AUTO_UPDATE: 1
+  SHELL: /bin/bash
+
+jobs:
+  lint:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+    - name: Cancel Previous Runs
+      uses: styfle/cancel-workflow-action@0.9.1
+      with:
+        access_token: ${{ github.token }}
+    - uses: actions/checkout@v2.4.0
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2.2.2
+      with:
+        python-version: 3.8
+    - name: Install requirements
+      run: |
+        pip install wheel
+        pip install -e '.[tests]'
+        pip install git+https://github.com/iterative/dvc pre-commit
+    - name: Check README
+      run: python setup.py checkdocs
+    - uses: pre-commit/action@v2.0.3
+  tests:
+    timeout-minutes: 45
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-20.04, windows-latest, macos-latest]
+        pyv: ["3.7", "3.8", "3.9", "3.10"]
+        exclude:
+          # no wheels for pygit2 yet
+          - os: windows-latest
+            pyv: "3.10"
+    steps:
+    - uses: actions/checkout@v2.4.0
+      with:
+        fetch-depth: 0
+    - name: Set up Python
+      uses: actions/setup-python@v2.2.2
+      with:
+        python-version: ${{ matrix.pyv }}
+    - name: get pip cache dir
+      id: pip-cache-dir
+      run: |
+        echo "::set-output name=dir::$(pip cache dir)"
+    - name: set pip cache
+      id: pip-cache
+      uses: actions/cache@v2.1.6
+      with:
+        path: ${{ steps.pip-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('setup.cfg') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    - name: install
+      if: steps.cache.pip-cache-dir.cache-hit != 'true'
+      run: |
+        pip install --upgrade pip setuptools wheel
+        pip install -e ".[tests]"
+        pip install git+https://github.com/iterative/dvc
+    - name: setup git
+      run: |
+        git config --global user.email "dvctester@example.com"
+        git config --global user.name "DVC Tester"
+    - name: run tests
+      timeout-minutes: 40
+      run: pytest -n=auto --cov-report=xml --cov-report=term
+    - name: upload coverage report
+      uses: codecov/codecov-action@v2.1.0
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: false
