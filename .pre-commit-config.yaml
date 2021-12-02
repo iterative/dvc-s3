@@ -1,0 +1,57 @@
+ci:
+  skip: [mypy, pylint]
+
+repos:
+  - hooks:
+      - id: black
+        language_version: python3
+    repo: https://github.com/ambv/black
+    rev: 21.10b0
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-toml
+      - id: check-yaml
+  - hooks:
+      - id: codespell
+        args: 
+          - --ignore-words-list
+          - ba,datas,fo,uptodate
+    repo: https://github.com/codespell-project/codespell
+    rev: v2.1.0
+  - hooks:
+      - id: isort
+        language_version: python3
+    repo: https://github.com/timothycrosley/isort
+    rev: 5.9.3
+  - hooks:
+      - id: flake8
+        language_version: python3
+        additional_dependencies:
+          - flake8-bugbear
+          - flake8-comprehensions
+          - flake8-debugger
+          - flake8-string-format
+    repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+  - repo: local
+    hooks:
+    - id: mypy
+      name: mypy
+      entry: mypy
+      files: ^dvc_s3/
+      language: system
+      types: [python]
+    - id: pylint
+      name: pylint
+      entry: pylint
+      language: system
+      types: [python]
+  - hooks:
+      - args:
+          - -i
+          - "2"
+        id: beautysh
+        language_version: python3
+    repo: https://github.com/lovesegfault/beautysh
+    rev: v6.2.1
