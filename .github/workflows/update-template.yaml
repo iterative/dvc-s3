@@ -14,7 +14,7 @@ jobs:
     - name: Update template
       id: update
       run: |
-        craft update
+        craft update -y
         echo "::set-output name=changes::$(git diff)"
     - name: Create PR
       if: ${{ steps.update.outputs.changes != '' }}
