@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '5 1 * * *'  # every day at 01:05
 
+  workflow_dispatch:
+
 jobs:
   update:
     runs-on: ubuntu-latest
