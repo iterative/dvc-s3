@@ -6,6 +6,8 @@ on:
   schedule:
     - cron: '5 1 * * *'  # every day at 01:05
 
+  workflow_dispatch:
+
 env:
   DVC_TEST: "true"
   HOMEBREW_NO_AUTO_UPDATE: 1
