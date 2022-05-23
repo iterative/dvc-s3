@@ -3,6 +3,9 @@ from dvc.testing.test_api import TestAPI  # noqa, pylint: disable=unused-import
 from dvc.testing.test_remote import (  # noqa, pylint: disable=unused-import
     TestRemote,
 )
+from dvc.testing.test_run_cache import (  # noqa, pylint: disable=unused-import
+    test_push_pull,
+)
 from dvc.testing.test_workspace import TestAdd as _TestAdd
 from dvc.testing.test_workspace import TestImport as _TestImport
 
