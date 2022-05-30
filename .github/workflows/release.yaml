@@ -1,0 +1,25 @@
+name: Release
+on:
+  release:
+    types: [published]
+jobs:
+  pip:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.8
+    - name: Build packages
+      run: |
+        pip install -U pip
+        pip install -U build setuptools>=58.2
+        python -m build --sdist --wheel --outdir dist/
+    - name: Publish packages to PyPI
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_TOKEN }}
