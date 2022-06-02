@@ -24,4 +24,5 @@ jobs:
       with:
         commit-message: update template
         title: update template
+        token: ${{ secrets.WORKFLOW_TOKEN }}
 
