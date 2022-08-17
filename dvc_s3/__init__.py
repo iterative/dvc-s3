@@ -4,7 +4,7 @@ from collections import defaultdict
 
 from dvc_objects.fs.base import ObjectFileSystem
 from dvc_objects.fs.errors import ConfigError
-from dvc_objects.fs.utils import flatten, unflatten
+from dvc_objects.fs.utils import flatten, human_readable_to_bytes, unflatten
 from funcy import cached_property, wrap_prop
 
 _AWS_CONFIG_PATH = os.path.join(os.path.expanduser("~"), ".aws", "config")
@@ -36,8 +36,6 @@ class S3FileSystem(ObjectFileSystem):
         general session config"""
 
         from boto3.s3.transfer import TransferConfig
-
-        from ..utils import human_readable_to_bytes
 
         config, transfer_config = {}, {}
         for key, value in s3_config.items():
