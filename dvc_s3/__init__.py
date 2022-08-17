@@ -2,11 +2,10 @@ import os
 import threading
 from collections import defaultdict
 
-from funcy import cached_property, wrap_prop
-
 from dvc_objects.fs.base import ObjectFileSystem
 from dvc_objects.fs.errors import ConfigError
 from dvc_objects.fs.utils import flatten, unflatten
+from funcy import cached_property, wrap_prop
 
 _AWS_CONFIG_PATH = os.path.join(os.path.expanduser("~"), ".aws", "config")
 
