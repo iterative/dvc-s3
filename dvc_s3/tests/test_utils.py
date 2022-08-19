@@ -2,7 +2,6 @@ import pytest
 
 from dvc_s3 import human_readable_to_bytes
 
-
 KB = 1024
 MB = KB**2
 GB = KB**3
