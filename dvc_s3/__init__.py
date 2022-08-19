@@ -4,10 +4,34 @@ from collections import defaultdict
 
 from dvc_objects.fs.base import ObjectFileSystem
 from dvc_objects.fs.errors import ConfigError
-from dvc_objects.fs.utils import flatten, human_readable_to_bytes, unflatten
 from funcy import cached_property, wrap_prop
 
 _AWS_CONFIG_PATH = os.path.join(os.path.expanduser("~"), ".aws", "config")
+
+
+# https://github.com/aws/aws-cli/blob/5aa599949f60b6af554fd5714d7161aa272716f7/awscli/customizations/s3/utils.py
+MULTIPLIERS = {
+    "kb": 1024,
+    "mb": 1024**2,
+    "gb": 1024**3,
+    "tb": 1024**4,
+    "kib": 1024,
+    "mib": 1024**2,
+    "gib": 1024**3,
+    "tib": 1024**4,
+}
+
+
+def human_readable_to_bytes(value: str) -> int:
+    value = value.lower()
+    suffix = ""
+    if value.endswith(tuple(MULTIPLIERS.keys())):
+        size = 2
+        size += value[-2] == "i"  # KiB, MiB etc
+        value, suffix = value[:-size], value[-size:]
+
+    multiplier = MULTIPLIERS.get(suffix, 1)
+    return int(value) * multiplier
 
 
 # pylint:disable=abstract-method
@@ -73,6 +97,7 @@ class S3FileSystem(ObjectFileSystem):
     def _prepare_credentials(self, **config):
         import base64
 
+        from flatten_dict import flatten, unflatten
         from s3fs.utils import SSEParams
 
         login_info = defaultdict(dict)
@@ -149,12 +174,10 @@ class S3FileSystem(ObjectFileSystem):
         if config_path:
             os.environ.setdefault("AWS_CONFIG_FILE", config_path)
 
+        d = flatten(login_info, reducer="dot")
         return unflatten(
-            {
-                key: value
-                for key, value in flatten(login_info).items()
-                if value is not None
-            }
+            {key: value for key, value in d.items() if value is not None},
+            splitter="dot",
         )
 
     @wrap_prop(threading.Lock())
