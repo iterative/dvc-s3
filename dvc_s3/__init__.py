@@ -1,10 +1,13 @@
 import os
 import threading
 from collections import defaultdict
+from typing import Any, Dict
 
 from dvc_objects.fs.base import ObjectFileSystem
 from dvc_objects.fs.errors import ConfigError
 from funcy import cached_property, wrap_prop
+
+from .path import S3Path
 
 _AWS_CONFIG_PATH = os.path.join(os.path.expanduser("~"), ".aws", "config")
 
@@ -54,6 +57,25 @@ class S3FileSystem(ObjectFileSystem):
         "multipart_chunksize": "multipart_chunksize",
     }
 
+    @cached_property
+    def path(self) -> S3Path:
+        def _getcwd():
+            return self.fs.root_marker
+
+        return S3Path(self.sep, getcwd=_getcwd)
+
+    @classmethod
+    def _get_kwargs_from_urls(cls, urlpath: str) -> Dict[str, Any]:
+        ret = super()._get_kwargs_from_urls(urlpath)
+        url_query = ret.get("url_query")
+        if url_query is not None:
+            from urllib.parse import parse_qs
+
+            parsed = parse_qs(url_query)
+            if "versionId" in parsed:
+                ret["version_aware"] = True
+        return ret
+
     def _split_s3_config(self, s3_config):
         """Splits the general s3 config into 2 different config
         objects, one for transfer.TransferConfig and other is the
@@ -101,6 +123,8 @@ class S3FileSystem(ObjectFileSystem):
         from s3fs.utils import SSEParams
 
         login_info = defaultdict(dict)
+
+        login_info["version_aware"] = config.get("version_aware", False)
 
         # credentials
         login_info["key"] = config.get("access_key_id")
