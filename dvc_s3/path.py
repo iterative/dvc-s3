@@ -25,7 +25,7 @@ class S3Path(Path):
         query = parse_qs(parts[3])
         if self.VERSION_ID_KEY in query:
             raise ValueError("path already includes a version query")
-        parts[3] = f"versionid={version_id}" if version_id else ""
+        parts[3] = f"{self.VERSION_ID_KEY}={version_id}" if version_id else ""
         return urlunsplit(parts)
 
     def version_path(self, path: AnyFSPath, version_id: Optional[str]) -> str:
