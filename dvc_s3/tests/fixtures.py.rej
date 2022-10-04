@@ -1,0 +1,6 @@
+diff a/dvc_s3/tests/fixtures.py b/dvc_s3/tests/fixtures.py	(rejected hunks)
+@@ -19,4 +19,3 @@ def make_s3():
+ @pytest.fixture
+ def s3(make_s3):
+     return make_s3()
+-
