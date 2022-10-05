@@ -1,0 +1,29 @@
+diff a/dvc_s3/tests/test_dvc.py b/dvc_s3/tests/test_dvc.py	(rejected hunks)
+@@ -1,9 +1,11 @@
+ import pytest
+-from dvc.testing.test_api import TestAPI  # noqa, pylint: disable=unused-import
+-from dvc.testing.test_remote import (  # noqa, pylint: disable=unused-import
++from dvc.testing.api_tests import (  # noqa, pylint: disable=unused-import
++    TestAPI,
++)
++from dvc.testing.remote_tests import (  # noqa, pylint: disable=unused-import
+     TestRemote,
+ )
+-from dvc.testing.test_workspace import (  # noqa, pylint: disable=unused-import
++from dvc.testing.workspace_tests import (  # noqa, pylint: disable=unused-import
+     TestAdd,
+     TestImport,
+ )
+@@ -13,6 +15,7 @@ from dvc.testing.test_workspace import (  # noqa, pylint: disable=unused-import
+ def cloud_name():
+     return "s3"
+ 
++
+ @pytest.fixture
+ def remote(make_remote, cloud_name):
+     yield make_remote(name="upstream", typ=cloud_name)
+@@ -51,4 +54,3 @@ def hash_value():
+ @pytest.fixture
+ def dir_hash_value(dir_md5):
+     raise NotImplementedError
+-
