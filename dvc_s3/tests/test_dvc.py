@@ -6,6 +6,7 @@ from dvc.testing.remote_tests import (  # noqa, pylint: disable=unused-import
     TestRemote,
 )
 from dvc.testing.workspace_tests import TestAdd as _TestAdd
+from dvc.testing.workspace_tests import TestGetUrl as _TestGetUrl
 from dvc.testing.workspace_tests import TestImport as _TestImport
 from dvc.testing.workspace_tests import TestLsUrl as _TestLsUrl
 
@@ -54,4 +55,8 @@ class TestAdd(_TestAdd):
 
 
 class TestLsUrl(_TestLsUrl):
+    pass
+
+
+class TestGetUrl(_TestGetUrl):
     pass
