@@ -32,12 +32,12 @@ def s3_fake_creds_file(monkeypatch):
 
 
 @pytest.fixture(scope="session")
-def docker_compose_file(pytestconfig):
+def docker_compose_file():
     return os.path.join(os.path.dirname(__file__), "docker-compose.yml")
 
 
 @pytest.fixture(scope="session")
-def s3_server(docker_compose, docker_services):
+def s3_server(docker_compose, docker_services):  # pylint: disable=unused-argument
     import requests
 
     port = docker_services.port_for("motoserver", 5000)
@@ -58,6 +58,7 @@ def s3_server(docker_compose, docker_services):
 
 
 @pytest.fixture
+# pylint: disable-next=redefined-outer-name,unused-argument
 def make_s3(s3_server, s3_fake_creds_file):
     def _make_s3():
         s3dir = S3(S3.get_url())
@@ -70,7 +71,7 @@ def make_s3(s3_server, s3_fake_creds_file):
 
 
 @pytest.fixture
-def s3(make_s3):
+def s3(make_s3):  # pylint: disable=redefined-outer-name
     return make_s3()
 
 
