@@ -37,7 +37,9 @@ def docker_compose_file():
 
 
 @pytest.fixture(scope="session")
-def s3_server(docker_compose, docker_services):  # pylint: disable=unused-argument
+def s3_server(
+    docker_compose, docker_services
+):  # pylint: disable=unused-argument
     import requests
 
     port = docker_services.port_for("motoserver", 5000)
@@ -45,7 +47,7 @@ def s3_server(docker_compose, docker_services):  # pylint: disable=unused-argume
 
     def _check():
         try:
-            r = requests.get(endpoint_url)
+            r = requests.get(endpoint_url, timeout=10)
             return r.ok
         except requests.RequestException:
             return False
