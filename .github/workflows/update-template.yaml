@@ -3,14 +3,13 @@ name: Update template
 on:
   schedule:
     - cron: '5 1 * * *'  # every day at 01:05
-
   workflow_dispatch:
 
 jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Install deps
       run: pip install cruft
     - name: Update template
@@ -25,4 +24,3 @@ jobs:
         commit-message: update template
         title: update template
         token: ${{ secrets.WORKFLOW_TOKEN }}
-

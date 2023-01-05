@@ -54,12 +54,11 @@ files = ["dvc_s3"]
 [tool.pylint.master]
 extension-pkg-whitelist = ["pygit2"]
 init-hook = "import sys; sys.path.append(str('tests'))"
-load-plugins = ["pylint_pytest"]
 
 [tool.pylint.message_control]
 disable = [
-    "format", "refactoring", "spelling", "design", "no-self-use",
-    "invalid-name", "misplaced-comparison-constant", "duplicate-code", "fixme",
+    "format", "refactoring", "spelling", "design",
+    "invalid-name", "duplicate-code", "fixme",
     "unused-wildcard-import", "cyclic-import", "wrong-import-order",
     "wrong-import-position", "ungrouped-imports", "multiple-imports",
     "logging-format-interpolation", "logging-fstring-interpolation",
