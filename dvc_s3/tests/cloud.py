@@ -7,16 +7,12 @@ from dvc.testing.path_info import CloudURLInfo
 from funcy import cached_property
 
 TEST_AWS_REPO_BUCKET = os.environ.get("DVC_TEST_AWS_REPO_BUCKET", "dvc-temp")
-TEST_AWS_ENDPOINT_URL = "http://127.0.0.1:{port}/"
 
 
 class S3(Cloud, CloudURLInfo):
-
-    TEST_AWS_ENDPOINT_URL = None
-
     @property
     def config(self):
-        return {"url": self.url, "endpointurl": self.TEST_AWS_ENDPOINT_URL}
+        return {"url": self.url}
 
     @staticmethod
     def _get_storagepath():
@@ -81,3 +77,23 @@ class S3(Cloud, CloudURLInfo):
     @property
     def fs_path(self):
         return self.bucket + "/" + self.path.lstrip("/")
+
+
+class FakeS3(S3):
+    """Fake S3 client that is supposed to be using a mock server's endpoint"""
+
+    def __init__(self, *args, endpoint_url: str, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.endpoint_url = endpoint_url
+
+    def __truediv__(self, key):
+        ret = super().__truediv__(key)
+        ret.endpoint_url = self.endpoint_url
+        return ret
+
+    @property
+    def config(self):
+        return {"url": self.url, "endpointurl": self.endpoint_url}
+
+    def get_url(self):  # pylint: disable=arguments-differ
+        return str(self)
