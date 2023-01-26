@@ -4,6 +4,8 @@ from dvc.testing.api_tests import (  # noqa, pylint: disable=unused-import
 )
 from dvc.testing.remote_tests import (  # noqa, pylint: disable=unused-import
     TestRemote,
+    TestRemoteVersionAware,
+    TestRemoteWorktree,
 )
 from dvc.testing.workspace_tests import TestAdd as _TestAdd
 from dvc.testing.workspace_tests import TestGetUrl as _TestGetUrl
@@ -19,6 +21,16 @@ def cloud(make_cloud):
 @pytest.fixture
 def remote(make_remote):
     yield make_remote(name="upstream", typ="s3")
+
+
+@pytest.fixture
+def remote_version_aware(make_remote_version_aware):
+    yield make_remote_version_aware(name="upstream", typ="s3")
+
+
+@pytest.fixture
+def remote_worktree(make_remote_worktree):
+    yield make_remote_worktree(name="upstream", typ="s3")
 
 
 @pytest.fixture
