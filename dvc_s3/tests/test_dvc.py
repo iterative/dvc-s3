@@ -14,6 +14,7 @@ from dvc.testing.workspace_tests import (  # noqa, pylint: disable=unused-import
     TestImportURLVersionAware,
 )
 from dvc.testing.workspace_tests import TestLsUrl as _TestLsUrl
+from dvc.testing.workspace_tests import TestToRemote as _TestToRemote
 
 
 @pytest.fixture
@@ -74,4 +75,8 @@ class TestLsUrl(_TestLsUrl):
 
 
 class TestGetUrl(_TestGetUrl):
+    pass
+
+
+class TestToRemote(_TestToRemote):
     pass
