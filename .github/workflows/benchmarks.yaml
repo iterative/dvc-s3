@@ -30,6 +30,7 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: write
 
 jobs:
   bench:
@@ -42,6 +43,7 @@ jobs:
         pyv: ["3.10"]
 
     steps:
+    - uses: iterative/setup-cml@v1
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
@@ -70,14 +72,11 @@ jobs:
         path: .benchmarks
 
     - name: create md
-      if: github.event_name == 'pull_request'
-      id: get-comment-body
-      run: |
-        PY_COLORS=0 py.test-benchmark compare --group-by func --sort name
-        echo ::set-output name=body::$body
-    - name: post comment
+      env:
+        REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       if: ${{ github.event_name == 'pull_request' && ! github.event.pull_request.head.repo.fork }}
-      uses: peter-evans/create-or-update-comment@v2
-      with:
-        issue-number: ${{ github.event.pull_request.number }}
-        body: ${{ steps.get-comment-body.outputs.body }}
+      run: |
+        echo '```' > report.md
+        PY_COLORS=0 py.test-benchmark compare --group-by func --sort name >> report.md
+        echo '```' >> report.md
+        cml comment create report.md
