@@ -6,8 +6,6 @@ from dvc.testing.cloud import Cloud
 from dvc.testing.path_info import CloudURLInfo
 from funcy import cached_property
 
-TEST_AWS_REPO_BUCKET = os.environ.get("DVC_TEST_AWS_REPO_BUCKET", "dvc-temp")
-
 
 class S3(Cloud, CloudURLInfo):
     @property
@@ -16,13 +14,9 @@ class S3(Cloud, CloudURLInfo):
 
     @staticmethod
     def _get_storagepath():
-        return (
-            TEST_AWS_REPO_BUCKET
-            + "/"
-            + "dvc_test_caches"
-            + "/"
-            + str(uuid.uuid4())
-        )
+        bucket = os.environ.get("DVC_TEST_AWS_REPO_BUCKET")
+        assert bucket
+        return bucket + "/" + "dvc_test_caches" + "/" + str(uuid.uuid4())
 
     @staticmethod
     def get_url():
