@@ -7,7 +7,6 @@ from dvc.testing.remote_tests import (  # noqa, pylint: disable=unused-import
     TestRemoteVersionAware,
     TestRemoteWorktree,
 )
-from dvc.testing.workspace_tests import TestAdd as _TestAdd
 from dvc.testing.workspace_tests import TestGetUrl as _TestGetUrl
 from dvc.testing.workspace_tests import TestImport as _TestImport
 from dvc.testing.workspace_tests import (  # noqa, pylint: disable=unused-import
@@ -28,20 +27,6 @@ class TestImport(_TestImport):
 
     @pytest.fixture
     def dir_md5(self):
-        return "ec602a6ba97b2dd07bd6d2cd89674a60.dir"
-
-
-class TestAdd(_TestAdd):
-    @pytest.fixture
-    def hash_name(self):
-        return "etag"
-
-    @pytest.fixture
-    def hash_value(self):
-        return "8c7dd922ad47494fc02c388e12c00eac"
-
-    @pytest.fixture
-    def dir_hash_value(self):
         return "ec602a6ba97b2dd07bd6d2cd89674a60.dir"
 
 
