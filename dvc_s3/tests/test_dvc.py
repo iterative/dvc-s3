@@ -5,7 +5,6 @@ from dvc.testing.api_tests import (  # noqa, pylint: disable=unused-import
 from dvc.testing.remote_tests import (  # noqa, pylint: disable=unused-import
     TestRemote,
     TestRemoteVersionAware,
-    TestRemoteWorktree,
 )
 from dvc.testing.workspace_tests import TestGetUrl as _TestGetUrl
 from dvc.testing.workspace_tests import TestImport as _TestImport
