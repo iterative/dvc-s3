@@ -206,7 +206,7 @@ class S3FileSystem(ObjectFileSystem):
 
     @wrap_prop(threading.Lock())
     @cached_property
-    def fs(self):
+    def fs(self):  # pylint: disable=invalid-overridden-method
         from s3fs import S3FileSystem as _S3FileSystem
 
         return _S3FileSystem(**self.fs_args)
