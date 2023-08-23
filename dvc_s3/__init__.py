@@ -3,9 +3,10 @@ import threading
 from collections import defaultdict
 from typing import Any, Dict
 
+from dvc.utils.objects import cached_property
 from dvc_objects.fs.base import ObjectFileSystem
 from dvc_objects.fs.errors import ConfigError
-from funcy import cached_property, wrap_prop
+from funcy import wrap_prop
 
 from .path import S3Path
 
