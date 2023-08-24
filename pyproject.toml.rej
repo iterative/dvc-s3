@@ -1,0 +1,12 @@
+diff a/pyproject.toml b/pyproject.toml	(rejected hunks)
+@@ -58,8 +58,8 @@ load-plugins = ["pylint_pytest"]
+ 
+ [tool.pylint.message_control]
+ disable = [
+-    "format", "refactoring", "spelling", "design", "no-self-use",
+-    "invalid-name", "misplaced-comparison-constant", "duplicate-code", "fixme",
++    "format", "refactoring", "spelling", "design",
++    "invalid-name", "duplicate-code", "fixme",
+     "unused-wildcard-import", "cyclic-import", "wrong-import-order",
+     "wrong-import-position", "ungrouped-imports", "multiple-imports",
+     "logging-format-interpolation", "logging-fstring-interpolation",
