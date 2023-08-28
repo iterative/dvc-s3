@@ -8,6 +8,7 @@ repos:
         entry: .rej files found, fix conflicts from these rejected files.
         language: fail
         files: \.rej$
+    repo: local
   - hooks:
       - id: black
         language_version: python3
