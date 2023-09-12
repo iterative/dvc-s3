@@ -9,6 +9,10 @@ permissions:
 
 jobs:
   pip:
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v3
@@ -27,5 +31,3 @@ jobs:
         twine check dist/*
     - name: Publish packages to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        password: ${{ secrets.PYPI_TOKEN }}
