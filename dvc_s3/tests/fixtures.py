@@ -13,7 +13,7 @@ def make_s3(request):
             return S3(S3.get_url())
         tmp_s3_path = request.getfixturevalue("tmp_s3_path")
         s3_server = request.getfixturevalue("s3_server")
-        return FakeS3(str(tmp_s3_path).rstrip("/"), endpoint_url=s3_server)
+        return FakeS3(str(tmp_s3_path).rstrip("/"), config=s3_server)
 
     return _make_s3
 
@@ -22,7 +22,7 @@ def make_s3(request):
 # pylint: disable-next=redefined-outer-name,unused-argument
 def make_s3_version_aware(versioning, tmp_s3_path, s3_server):
     def _make_s3():
-        return FakeS3(str(tmp_s3_path).rstrip("/"), endpoint_url=s3_server)
+        return FakeS3(str(tmp_s3_path).rstrip("/"), config=s3_server)
 
     return _make_s3
 

@@ -26,7 +26,14 @@ class S3(Cloud, CloudURLInfo):
     def _s3(self):
         import boto3
 
-        return boto3.client("s3", endpoint_url=self.config["endpointurl"])
+        return boto3.client(
+            "s3",
+            aws_access_key_id=self.config.get("access_key_id"),
+            aws_secret_access_key=self.config.get("secret_access_key"),
+            aws_session_token=self.config.get("session_token"),
+            endpoint_url=self.config.get("endpointurl"),
+            region_name=self.config.get("region"),
+        )
 
     def is_file(self):
         from botocore.exceptions import ClientError
@@ -76,18 +83,25 @@ class S3(Cloud, CloudURLInfo):
 class FakeS3(S3):
     """Fake S3 client that is supposed to be using a mock server's endpoint"""
 
-    def __init__(self, *args, endpoint_url: str, **kwargs):
+    def __init__(self, *args, config: dict, **kwargs):
         super().__init__(*args, **kwargs)
-        self.endpoint_url = endpoint_url
+        self._config = config
 
     def __truediv__(self, key):
         ret = super().__truediv__(key)
-        ret.endpoint_url = self.endpoint_url
+        ret._config = self._config
         return ret
 
     @property
     def config(self):
-        return {"url": self.url, "endpointurl": self.endpoint_url}
+        return {
+            "url": self.url,
+            "endpointurl": self._config["endpoint_url"],
+            "access_key_id": self._config["aws_access_key_id"],
+            "secret_access_key": self._config["aws_secret_access_key"],
+            "session_token": self._config["aws_session_token"],
+            "region": self._config["region_name"],
+        }
 
     def get_url(self):  # pylint: disable=arguments-differ
         return str(self)
