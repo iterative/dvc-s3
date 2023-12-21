@@ -65,6 +65,29 @@ class S3(Cloud, CloudURLInfo):
     def write_bytes(self, contents):
         self._s3.put_object(Bucket=self.bucket, Key=self.path, Body=contents)
 
+    def unlink(self, missing_ok: bool = False) -> None:
+        if not self.exists():
+            if not missing_ok:
+                raise FileNotFoundError(str(self))
+            return
+        self._s3.delete_object(Bucket=self.bucket, Key=self.path)
+
+    def rmdir(self, recursive: bool = True) -> None:
+        if not self.is_dir():
+            raise NotADirectoryError(str(self))
+
+        path = (self / "").path
+        resp = self._s3.list_objects(Bucket=self.bucket, Prefix=path)
+        entries = resp.get("Contents")
+        if not entries:
+            return
+
+        if not recursive:
+            raise OSError(f"Not recursive and directory not empty: {self}")
+
+        for entry in entries:
+            self._s3.delete_object(Bucket=self.bucket, Key=entry["Key"])
+
     def read_bytes(self):
         data = self._s3.get_object(Bucket=self.bucket, Key=self.path)
         return data["Body"].read()
