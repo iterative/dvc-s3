@@ -1,3 +1,3 @@
-from dvc.testing.fixtures import *  # noqa, pylint: disable=wildcard-import,unused-import
+from dvc.testing.fixtures import *  # noqa: F403
 
-from .fixtures import *  # noqa, pylint: disable=wildcard-import,unused-import
+from .fixtures import *  # noqa: F403

@@ -5,28 +5,67 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 write_to = "dvc_s3/_dvc_s3_version.py"
 
-[tool.black]
-line-length = 79
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-)/
-'''
+[project]
+name = "dvc-s3"
+description = "s3 plugin for dvc"
+readme = "README.rst"
+keywords = [
+    "dvc",
+    "s3",
+]
+license = { text = "Apache License 2.0" }
+maintainers = [{ name = "Iterative", email = "support@dvc.org" }]
+authors = [{ name = "Iterative", email = "support@dvc.org" }]
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dynamic = ["version"]
+dependencies = [
+    "dvc",
+    "s3fs>=2023.6.0",
+    "aiobotocore[boto3]>=2.5.0",
+    "flatten_dict>=0.4.1,<1",
+]
 
-[tool.isort]
-profile = "black"
-known_first_party = ["dvc_s3"]
-line_length = 79
+[project.optional-dependencies]
+tests = [
+    "wheel==0.37.0",
+    "dvc[testing]",
+    # Test requirements
+    "pytest==6.2.5",
+    "pytest-cov==3.0.0",
+    "pytest-xdist==2.4.0",
+    "pytest-mock==3.6.1",
+    "pytest-lazy-fixture==0.6.3",
+    "pytest-servers[s3]>=0.4.0",
+    "pytest-docker>=1,<2",
+    "flaky==3.7.0",
+    "mock==4.0.3",
+    "wget==3.2",
+    "filelock==3.3.2",
+    "xmltodict==0.12.0",
+    # required by collective.checkdocs
+    "Pygments==2.10.0",
+    "collective.checkdocs==0.2",
+    "pydocstyle==6.1.1",
+    # type-checking
+    "mypy==0.981",
+    "types-requests==2.25.11",
+    "types-tabulate==0.8.3",
+    "types-toml==0.10.1",
+    # optional dependencies
+    'pywin32>=225; sys_platform == "win32"',
+]
+
+[project.urls]
+Documentation = "https://dvc.org/doc"
+Source = "https://github.com/iterative/dvc-s3"
 
 [tool.pytest.ini_options]
 log_level = "debug"
@@ -51,28 +90,46 @@ warn_redundant_casts = true
 warn_unreachable = true
 files = ["dvc_s3"]
 
-[tool.pylint.master]
-extension-pkg-whitelist = ["pygit2"]
-init-hook = "import sys; sys.path.append(str('tests'))"
+[tool.ruff]
+output-format = "full"
+show-fixes = true
 
-[tool.pylint.message_control]
-disable = [
-    "format", "refactoring", "spelling", "design",
-    "invalid-name", "duplicate-code", "fixme",
-    "unused-wildcard-import", "cyclic-import", "wrong-import-order",
-    "wrong-import-position", "ungrouped-imports", "multiple-imports",
-    "logging-format-interpolation", "logging-fstring-interpolation",
-    "missing-function-docstring", "missing-module-docstring",
-    "missing-class-docstring", "raise-missing-from", "import-outside-toplevel",
+[tool.ruff.lint]
+ignore = [
+    "N818", "S101", "ISC001", "PT004", "PT007", "RET502", "RET503", "SIM105", "SIM108", "SIM117",
+    "TRY003", "TRY300", "PLR2004", "PLW2901", "LOG007",
 ]
-enable = ["c-extension-no-member", "no-else-return"]
+select = [
+    "F", "E", "W", "C90", "I", "N", "UP", "YTT", "ASYNC", "S", "BLE", "B", "A", "C4", "T10",
+    "EXE", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET",
+    "SLOT", "SIM", "TID", "TCH", "ARG", "PGH", "PLC", "PLE", "PLR", "PLW", "TRY",
+    "FLY", "PERF101", "LOG", "RUF", "RUF022", "RUF023", "RUF024", "RUF025", "RUF026",
+]
+preview = true
+explicit-preview-rules = true
 
-[tool.pylint.typecheck]
-generated-members = ["pytest.lazy_fixture", "logging.TRACE", "logger.trace", "sys.getwindowsversion", "argparse.Namespace"]
-ignored-classes = ["Dvcfile"]
-ignored-modules = ["azure"]
-signature-mutators = ["funcy.decorators.decorator"]
+[tool.ruff.lint.flake8-pytest-style]
+fixture-parentheses = false
+mark-parentheses = false
+parametrize-names-type = "csv"
+raises-extend-require-match-for = ["dvc.exceptions.DvcException"]
 
-[tool.pylint.variables]
-dummy-variables-rgx = "_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_"
-ignored-argument-names = "_.*|^ignored_|^unused_|args|kwargs"
+[tool.ruff.lint.flake8-tidy-imports]
+
+[tool.ruff.lint.flake8-type-checking]
+strict = true
+
+[tool.ruff.lint.flake8-unused-arguments]
+ignore-variadic-names = true
+
+[tool.ruff.lint.isort]
+known-first-party = ["dvc", "dvc_data", "dvc_objects"]
+
+[tool.ruff.lint.pep8-naming]
+extend-ignore-names = ["M", "SCM"]
+
+[tool.ruff.lint.pylint]
+max-args = 10
+
+[tool.ruff.lint.per-file-ignores]
+"dvc-s3/tests/**" = ["S", "ARG001", "ARG002", "TRY002", "TRY301"]

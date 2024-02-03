@@ -26,5 +26,5 @@ def test_conversions_human_readable_to_bytes(test_input, expected):
 
 @pytest.mark.parametrize("invalid_input", ["foo", "10XB", "1000Pb", "fooMiB"])
 def test_conversions_human_readable_to_bytes_invalid(invalid_input):
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # noqa: PT011
         human_readable_to_bytes(invalid_input)

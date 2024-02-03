@@ -1,13 +1,14 @@
 import os
 import threading
 from collections import defaultdict
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, ClassVar, Optional
 from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
+
+from funcy import first, wrap_prop
 
 from dvc.utils.objects import cached_property
 from dvc_objects.fs.base import ObjectFileSystem
 from dvc_objects.fs.errors import ConfigError
-from funcy import first, wrap_prop
 
 _AWS_CONFIG_PATH = os.path.join(os.path.expanduser("~"), ".aws", "config")
 
@@ -40,19 +41,19 @@ def human_readable_to_bytes(value: str) -> int:
 # pylint:disable=abstract-method
 class S3FileSystem(ObjectFileSystem):
     protocol = "s3"
-    REQUIRES = {"s3fs": "s3fs", "boto3": "boto3"}
+    REQUIRES: ClassVar[dict[str, str]] = {"s3fs": "s3fs", "boto3": "boto3"}
     PARAM_CHECKSUM = "etag"
 
     VERSION_ID_KEY = "versionId"
 
-    _GRANTS = {
+    _GRANTS: ClassVar[dict[str, str]] = {
         "grant_full_control": "GrantFullControl",
         "grant_read": "GrantRead",
         "grant_read_acp": "GrantReadACP",
         "grant_write_acp": "GrantWriteACP",
     }
 
-    _TRANSFER_CONFIG_ALIASES = {
+    _TRANSFER_CONFIG_ALIASES: ClassVar[dict[str, str]] = {
         "max_queue_size": "max_io_queue",
         "max_concurrent_requests": "max_concurrency",
         "multipart_threshold": "multipart_threshold",
@@ -63,7 +64,7 @@ class S3FileSystem(ObjectFileSystem):
         return self.fs.root_marker
 
     @classmethod
-    def split_version(cls, path: str) -> Tuple[str, Optional[str]]:
+    def split_version(cls, path: str) -> tuple[str, Optional[str]]:
         parts = list(urlsplit(path))
         query = parse_qs(parts[3])
         if cls.VERSION_ID_KEY in query:
@@ -91,7 +92,7 @@ class S3FileSystem(ObjectFileSystem):
     @classmethod
     def coalesce_version(
         cls, path: str, version_id: Optional[str]
-    ) -> Tuple[str, Optional[str]]:
+    ) -> tuple[str, Optional[str]]:
         path, path_version_id = cls.split_version(path)
         versions = {ver for ver in (version_id, path_version_id) if ver}
         if len(versions) > 1:
@@ -99,7 +100,7 @@ class S3FileSystem(ObjectFileSystem):
         return path, (versions.pop() if versions else None)
 
     @classmethod
-    def _get_kwargs_from_urls(cls, urlpath: str) -> Dict[str, Any]:
+    def _get_kwargs_from_urls(cls, urlpath: str) -> dict[str, Any]:
         ret = super()._get_kwargs_from_urls(urlpath)
         url_query = ret.get("url_query")
         if url_query is not None:
@@ -210,9 +211,7 @@ class S3FileSystem(ObjectFileSystem):
 
         # config kwargs
         session_config = login_info["config_kwargs"]
-        session_config["s3"] = self._load_aws_config_file(
-            login_info["profile"]
-        )
+        session_config["s3"] = self._load_aws_config_file(login_info["profile"])
 
         shared_creds = config.get("credentialpath")
         if shared_creds:
