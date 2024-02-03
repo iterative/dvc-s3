@@ -20,7 +20,7 @@ def make_s3(request):
 
 @pytest.fixture
 # pylint: disable-next=redefined-outer-name,unused-argument
-def make_s3_version_aware(versioning, tmp_s3_path, s3_server):
+def make_s3_version_aware(versioning, tmp_s3_path, s3_server):  # noqa: ARG001
     def _make_s3():
         return FakeS3(str(tmp_s3_path).rstrip("/"), config=s3_server)
 
@@ -29,29 +29,29 @@ def make_s3_version_aware(versioning, tmp_s3_path, s3_server):
 
 @pytest.fixture
 def s3(make_s3):  # pylint: disable=redefined-outer-name
-    yield make_s3()
+    return make_s3()
 
 
 @pytest.fixture
 def cloud(make_cloud):
-    yield make_cloud(typ="s3")
+    return make_cloud(typ="s3")
 
 
 @pytest.fixture
 def remote(make_remote):
-    yield make_remote(name="upstream", typ="s3")
+    return make_remote(name="upstream", typ="s3")
 
 
 @pytest.fixture
 def remote_version_aware(make_remote_version_aware):
-    yield make_remote_version_aware(name="upstream", typ="s3")
+    return make_remote_version_aware(name="upstream", typ="s3")
 
 
 @pytest.fixture
 def remote_worktree(make_remote_worktree):
-    yield make_remote_worktree(name="upstream", typ="s3")
+    return make_remote_worktree(name="upstream", typ="s3")
 
 
 @pytest.fixture
 def workspace(make_workspace):
-    yield make_workspace(name="workspace", typ="s3")
+    return make_workspace(name="workspace", typ="s3")

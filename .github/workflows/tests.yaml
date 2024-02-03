@@ -23,7 +23,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04, windows-latest, macos-latest]
-        pyv: ["3.8", "3.9", "3.10", "3.11"]
+        # NOTE: 3.12 is temporarily disabled waiting for
+        # https://github.com/fsspec/universal_pathlib/pull/152
+        pyv: ["3.9", "3.10", "3.11"]
 
     steps:
     - uses: actions/checkout@v3
