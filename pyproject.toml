@@ -132,4 +132,4 @@ extend-ignore-names = ["M", "SCM"]
 max-args = 10
 
 [tool.ruff.lint.per-file-ignores]
-"dvc-s3/tests/**" = ["S", "ARG001", "ARG002", "TRY002", "TRY301"]
+"dvc_s3/tests/**" = ["S", "ARG001", "ARG002", "TRY002", "TRY301"]
