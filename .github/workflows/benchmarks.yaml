@@ -63,7 +63,7 @@ jobs:
 
     - name: run benchmarks
       timeout-minutes: 180
-      run: pytest --dist no --benchmark-save benchmarks-s3 --benchmark-group-by func --dvc-revs main,2.45.0,2.41.1,2.40.0,2.39.0,2.18.1,2.11.0 --size ${DATASET} dvc_s3/tests/benchmarks.py --dvc-install-deps s3
+      run: pytest --dist no --benchmark-save benchmarks-s3 --benchmark-group-by func --dvc-revs main,2.45.0,2.41.1,2.40.0,2.39.0,2.18.1,2.11.0 --dataset ${DATASET} dvc_s3/tests/benchmarks.py --dvc-install-deps s3
 
     - name: upload raw results
       uses: actions/upload-artifact@v3
