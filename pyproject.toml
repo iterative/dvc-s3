@@ -69,7 +69,7 @@ Source = "https://github.com/iterative/dvc-s3"
 
 [tool.pytest.ini_options]
 log_level = "debug"
-addopts = "-ra"
+addopts = "-ra -pdvc.testing.plugin"
 markers = [
     "needs_internet: Might need network access for the tests",
 ]
