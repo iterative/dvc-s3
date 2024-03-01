@@ -31,7 +31,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-  
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -42,7 +42,7 @@ jobs:
     - name: install
       run: |
         pip install --upgrade pip wheel
-        pip install -e ".[tests]"
+        pip install -e ".[dev]"
         pip install "dvc[testing] @ git+https://github.com/iterative/dvc"
 
     - name: lint
