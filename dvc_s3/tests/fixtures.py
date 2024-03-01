@@ -20,7 +20,7 @@ def make_s3(request):
 
 @pytest.fixture
 # pylint: disable-next=redefined-outer-name,unused-argument
-def make_s3_version_aware(versioning, tmp_s3_path, s3_server):  # noqa: ARG001
+def make_s3_version_aware(versioning, tmp_s3_path, s3_server):
     def _make_s3():
         return FakeS3(str(tmp_s3_path).rstrip("/"), config=s3_server)
 

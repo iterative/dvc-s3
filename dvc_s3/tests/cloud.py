@@ -59,7 +59,7 @@ class S3(Cloud, CloudURLInfo):
     def exists(self):
         return self.is_file() or self.is_dir()
 
-    def mkdir(self, mode=0o777, parents=False, exist_ok=False):  # noqa: ARG002
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
         assert mode == 0o777
         assert parents
 

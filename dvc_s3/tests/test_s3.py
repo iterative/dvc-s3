@@ -9,8 +9,8 @@ bucket_name = "bucket-name"
 prefix = "some/prefix"
 url = f"s3://{bucket_name}/{prefix}"
 key_id = "key-id"
-key_secret = "key-secret"  # noqa: S105
-session_token = "session-token"  # noqa: S105
+key_secret = "key-secret"
+session_token = "session-token"
 
 
 @pytest.fixture(autouse=True, name="grants")
