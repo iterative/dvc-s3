@@ -240,7 +240,7 @@ class S3FileSystem(ObjectFileSystem):
     def fs(self):
         from s3fs import S3FileSystem as _S3FileSystem
 
-        s3_filesystem =  _S3FileSystem(**self.fs_args)
+        s3_filesystem = _S3FileSystem(**self.fs_args)
         s3_filesystem.connect()
 
         return s3_filesystem
