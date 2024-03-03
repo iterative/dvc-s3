@@ -43,7 +43,7 @@ jobs:
         pyv: ["3.10"]
 
     steps:
-    - uses: iterative/setup-cml@v1
+    - uses: iterative/setup-cml@v3
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
