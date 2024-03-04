@@ -1,5 +1,5 @@
 ci:
-  skip: [mypy, pylint]
+  skip: [mypy]
 
 repos:
   - hooks:
