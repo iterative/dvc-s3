@@ -167,7 +167,7 @@ class S3FileSystem(ObjectFileSystem):
         # session configuration
         login_info["profile"] = config.get("profile")
         login_info["use_ssl"] = config.get("use_ssl", True)
-        login_info["anon"] = config.get("anon")
+        login_info["anon"] = config.get("allow_anonymous_login")
 
         # extra client configuration
         client = login_info["client_kwargs"]
