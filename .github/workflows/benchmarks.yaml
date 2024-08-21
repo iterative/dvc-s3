@@ -38,36 +38,55 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        pyv: ["3.10"]
+        pyv: ["3.12"]
 
     steps:
     - uses: iterative/setup-cml@v3
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        path: dvc-s3
+
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        repository: iterative/dvc
+        path: dvc
+
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        repository: iterative/dvc-bench
+        path: dvc-bench
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.pyv }}
         cache: 'pip'
-        cache-dependency-path: setup.cfg
+        cache-dependency-path: |
+          pyproject.toml
+          dvc/pyproject.toml
 
     - name: install
-      run: |
-        pip install --upgrade pip wheel
-        pip install -e ".[tests]"
-        pip install "dvc[testing] @ git+https://github.com/iterative/dvc"
+      run: pip install -e "./dvc[testing]" -e "./dvc-s3[tests]"
 
     - name: run benchmarks
       timeout-minutes: 180
-      run: pytest --dist no --benchmark-save benchmarks-s3 --benchmark-group-by func --dvc-revs main,3.10.0,2.58.2 --dataset ${DATASET} dvc_s3/tests/benchmarks.py --dvc-install-deps s3
+      working-directory: dvc-s3/
+      run: >
+        pytest --benchmark-save benchmarks-s3 --benchmark-group-by func
+        dvc_s3/tests/benchmarks.py
+        --dvc-revs main,3.10.0,2.58.2
+        --dataset ${DATASET}
+        --dvc-install-deps s3
+        --dvc-bench-repo ../dvc-bench --dvc-repo ../dvc
 
     - name: upload raw results
       uses: actions/upload-artifact@v4
       with:
         name: .benchmarks
-        path: .benchmarks
+        path: dvc-s3/.benchmarks
 
     - name: create md
       env:
@@ -75,6 +94,7 @@ jobs:
       if: ${{ github.event_name == 'pull_request' && ! github.event.pull_request.head.repo.fork }}
       run: |
         echo '```' > report.md
-        PY_COLORS=0 py.test-benchmark compare --group-by func --sort name >> report.md
+        PY_COLORS=0 pytest-benchmark compare --group-by func --sort name >> report.md
         echo '```' >> report.md
         cml comment create report.md
+      working-directory: dvc-s3
