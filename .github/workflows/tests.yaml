@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04, windows-latest, macos-latest]
-        pyv: ["3.9", "3.10", "3.11", "3.12"]
+        pyv: ["3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - uses: actions/checkout@v4
@@ -34,14 +34,14 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.pyv }}
-        cache: 'pip'
-        cache-dependency-path: pyproject.toml
+
+    - uses: astral-sh/setup-uv@v3
+      with:
+        enable-cache: true
+        cache-dependency-glob: pyproject.toml
 
     - name: install
-      run: |
-        pip install --upgrade pip wheel
-        pip install -e ".[dev]"
-        pip install "dvc[testing] @ git+https://github.com/iterative/dvc"
+      run: uv pip install -e ".[dev]" "dvc[testing] @ git+https://github.com/iterative/dvc" --system
 
     - name: lint
       timeout-minutes: 10
