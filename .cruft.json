@@ -1,11 +1,12 @@
 {
   "template": "https://github.com/iterative/cookiecutter-dvc-plugin/",
-  "commit": "d58214dd515da71aaabd50dcc5d8b0c71d645e8b",
+  "commit": "13683f4eea044c4feb459503c391394f80e3d635",
   "checkout": null,
   "context": {
     "cookiecutter": {
       "plugin_name": "s3",
-      "_template": "https://github.com/iterative/cookiecutter-dvc-plugin/"
+      "_template": "https://github.com/iterative/cookiecutter-dvc-plugin/",
+      "_commit": "13683f4eea044c4feb459503c391394f80e3d635"
     }
   },
   "directory": null,
