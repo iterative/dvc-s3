@@ -60,9 +60,6 @@ class S3FileSystem(ObjectFileSystem):
         "multipart_chunksize": "multipart_chunksize",
     }
 
-    def getcwd(self):
-        return self.fs.root_marker
-
     @classmethod
     def split_version(cls, path: str) -> tuple[str, Optional[str]]:
         parts = list(urlsplit(path))
