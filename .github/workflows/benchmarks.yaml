@@ -38,7 +38,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        pyv: ["3.12"]
+        pyv: ["3.13"]
 
     steps:
     - uses: iterative/setup-cml@v3
