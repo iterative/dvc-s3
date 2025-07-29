@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=48", "wheel", "setuptools_scm[toml]>=6.3.1"]
+requires = ["setuptools>=77", "setuptools_scm[toml]>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
@@ -13,7 +13,8 @@ keywords = [
     "dvc",
     "s3",
 ]
-license = { text = "Apache License 2.0" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 maintainers = [{ name = "Iterative", email = "support@dvc.org" }]
 authors = [{ name = "Iterative", email = "support@dvc.org" }]
 requires-python = ">=3.9"
@@ -80,14 +81,14 @@ show-fixes = true
 
 [tool.ruff.lint]
 ignore = [
-    "N818", "S101", "ISC001", "PT004", "PT007", "RET502", "RET503", "SIM105", "SIM108", "SIM117",
-    "TRY003", "TRY300", "PLR2004", "PLW2901", "LOG007",
+    "N818", "S101", "ISC001", "PT007", "RET502", "RET503", "SIM105", "SIM108", "SIM117",
+    "TRY003", "TRY300", "PLC0415", "PLR2004", "PLW2901", "LOG007",
 ]
 select = [
     "F", "E", "W", "C90", "I", "N", "UP", "YTT", "ASYNC", "S", "BLE", "B", "A", "C4", "T10",
     "EXE", "ISC", "ICN", "G", "INP", "PIE", "T20", "PYI", "PT", "Q", "RSE", "RET",
     "SLOT", "SIM", "TID", "TCH", "ARG", "PGH", "PLC", "PLE", "PLR", "PLW", "TRY",
-    "FLY", "PERF101", "LOG", "RUF", "RUF022", "RUF023", "RUF024", "RUF025", "RUF026",
+    "FLY", "PERF101", "LOG", "RUF", "RUF022", "RUF023", "RUF024", "RUF026",
 ]
 preview = true
 explicit-preview-rules = true
