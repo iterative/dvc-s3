@@ -42,18 +42,18 @@ jobs:
 
     steps:
     - uses: iterative/setup-cml@v3
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         path: dvc-s3
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         repository: iterative/dvc
         path: dvc
 
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       with:
         fetch-depth: 0
         repository: iterative/dvc-bench
