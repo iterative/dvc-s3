@@ -37,7 +37,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        pyv: ["3.13"]
+        pyv: ["3.14"]
 
     steps:
     - uses: actions/checkout@v5
@@ -75,7 +75,7 @@ jobs:
       run: >
         pytest --benchmark-save benchmarks-s3 --benchmark-group-by func
         dvc_s3/tests/benchmarks.py
-        --dvc-revs main,3.10.0,2.58.2
+        --dvc-revs main,3.60.1,3.53.2
         --dataset ${DATASET}
         --dvc-install-deps s3
         --dvc-bench-repo ../dvc-bench --dvc-repo ../dvc
